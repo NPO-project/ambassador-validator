@@ -1,13 +1,15 @@
 // ==UserScript==
 // @include        http://nl*.tribalwars.nl/*
-// @name           tw_NPO-checker
-// @version        0.0.1
+// @name           tw_NPO-validator
+// @version        0.0.3
 // @namespace      www.http://dennisdegryse.be:2012 | www.45622066.nl | Tuam
 // @description    Checkt op nieuwe premiumfuncties (vanaf w26).
 // ==/UserScript==
 
 /* Changelog
 * v0.0.1 : initiële versie.
+* v0.0.2 : Premiumfuncties w26 toegevoegd
+* v0.0.3 : werkend in Chrome
 */
 (function (f) {
 	var d = document,
@@ -77,19 +79,19 @@
 	}
 
 // Activate script	
-	var main_switch = document.getElementById('footer_logo');
+	var main_switch = document.getElementById('footer_left');
 	var cookie = getCookie('NPOswitch');
 	if (cookie == 'false' || !cookie) {
-		main_switch.innerHTML += '<a id="NPOswitch">NPO-activeren</a>';
+		main_switch.innerHTML += '<a id="NPOswitch">&nbsp;&nbsp;-&nbsp;&nbsp;NPO-activeren</a>';
 		var NPO_switch = document.getElementById("NPOswitch");
 		NPO_switch.addEventListener('click', function() {activate();},true);
 	}
 	else {
-		main_switch.innerHTML += '<a id="NPOswitch">NPO-deactiveren</a>';
+		main_switch.innerHTML += '<a id="NPOswitch">&nbsp;&nbsp;-&nbsp;&nbsp;NPO-deactiveren</a>';
 		var NPO_switch = document.getElementById("NPOswitch");
 		NPO_switch.addEventListener('click', function() {deactivate();},true);
 	
-// Take a VV -> CANCELLED because multiple VV's might not work and not always should a VV taken automatically.
+// Take a VV -> CANCELLED because multiple VV's might not work and not always should a been VV taken automatically.
 /*		if (results[1] == 'settings' && vv == false) {
 			var vv = document.getElementsByClassName('vis')[2].getElementsByTagName('tr');
 			for (var i=1; i<vv.length; i++){
@@ -103,7 +105,7 @@
 			var result = document.getElementsByTagName('p')[2].getElementsByTagName('a')[0].click();
 		}
 // Forward to the premium overview
-		if (results[1] == 'overview' && vv == true) {
+		if (results[1] != 'settings' && results[1] != 'premium' && vv == true) {
 			window.location=window.location.href.replace(results[1], "premium&mode=log");
 		}
 	
@@ -114,7 +116,15 @@
 			for (var i=1; i<premium.length; i++){
 				var td = premium[i].getElementsByTagName('td')[4].innerHTML;
 				switch (td) {
-					case 'Premium nl22 30' : stopper = true;  break;																		// EDIT WITH PREMIUM VALUES
+					case 'Bouwkostreductie nl26' : stopper = true;  break;																		// EDIT WITH PREMIUM VALUES
+					case '+20% leemproductie nl26 7 auto' : stopper = true;  break;
+					case '+20% leemproductie nl26 7' : stopper = true;  break;
+					case '+20% houtproductie nl26 7 auto' : stopper = true;  break;
+					case '+20% houtproductie nl26 7' : stopper = true;  break;
+					case '+20% ijzerproductie nl26 7 auto' : stopper = true;  break;
+					case '+20% ijzerproductie nl26 7' : stopper = true;  break;
+					case 'Directe voltooiing nl26' : stopper = true;  break;
+					case 'Handel grondstoffen met de dorpshandelaar. nl26' : stopper = true;  break;
 				}
 				if (stopper == true) {
 					break;	
